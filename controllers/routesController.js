@@ -14,7 +14,7 @@ const routesController = {
         });
     },
 
-    // SHOW ROUUTE
+    // SHOW ROUTE
     getMovieById: (req, res) => {
         const movieId = req.params.id;
         const query = 'SELECT * FROM movies WHERE id = ?';
@@ -23,7 +23,8 @@ const routesController = {
             if (results.length === 0) return res.status(404).json({ error: 'Film non trovato' });
             res.json(results);
         });
-    }
+    },
+
 
 
 }
