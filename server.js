@@ -8,7 +8,13 @@ const serverError = require('./middlewares/serverError');
 
 const routes = require('./routers/routes');
 
+const cors = require("cors");
+
 app.use(express.static('public'));
+
+app.use(cors({
+  origin: process.env.FRONTEND_SERVER_PORT || "http://localhost:5173"
+}));
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
