@@ -1,33 +1,66 @@
 const connection = require('../data/db_connection');
 
-const routesController = {
-    // INDEX ROUTE
+// INDEX ROUTE
+const index = (req, res) => {
 
-    getAllMovies: (req, res) => {
-        const query = 'SELECT * FROM movies';
-        connection.query(query, (err, results) => {
+    const sql = "SELECT * FROM movies";
+
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error("error fetching movies", err);
+            return res.status(500).json({ error: true, message: "error fetching movies" });
+        }
+        results.json(results);
+    });
+};
+
+
+// SHOW ROUTE
+const show = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    const sql = "SELECT * FROM movies WHERE id = ?";
+
+    const reviewsSql = "SELECT id, review, rating, uername FROM reviews WHERE movie_id = ?";
+
+    connection.query(sql, [id], (err, results) => {
+        if (err) {
+            console.error("error fetching movies", err);
+            return res.status(500).json({ error: true, message: "error fetching movie" });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: true, message: "movie not found" });
+        }
+
+        const movie = results[0];
+
+        connection.query(reviewsSql, [id], (err, reviews) => {
             if (err) {
-                console.log(err);
-                return res.status(500).json({ error: 'Errore nel recupero delle informazioni sui film' });
+                console.error("error fetching reviews", err);
+                return res.status(500).json({ error: true, message: "error fetching reviews" });
             }
-            res.json(results);
+
+            movie.reviews = reviews;
+            res.json(movie);
         });
-    },
-
-    // SHOW ROUTE
-    getMovieById: (req, res) => {
-        const movieId = req.params.id;
-        const query = 'SELECT * FROM movies WHERE id = ?';
-        connection.query(query, [movieId], (err, results) => {
-            if (err) return res.status(500).json({ error: 'Errore nel recupero delle informazioni sul film scelto' });
-            if (results.length === 0) return res.status(404).json({ error: 'Film non trovato' });
-            res.json(results);
-        });
-    },
+    });
+};
 
 
+// store movie - for future implementation
+const store =  (req, res) => {
+res.status(501).json({error: true, message:"not implemented"})
+}
 
+// store review - for future implementation
+const storeReview = (req, res) => {
+    res.status(501).json({ error: true, message: "not implemented" })
 }
 
 
-module.exports = routesController;
+module.exports = {
+    index,
+    show,
+    store,
+    storeReview
+}

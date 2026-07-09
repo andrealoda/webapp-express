@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
 const port = process.env.API_SERVER_PORT || 3000;
+const routes = require('./routers/routes');
 
 // importo i middleware
 const notFound = require('./middlewares/notFound');
 const serverError = require('./middlewares/serverError');
 
-const routes = require('./routers/routes');
 
 const cors = require("cors");
 
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.use('/', routes); // al momento scelgo di utilizzare rotte semplici, senza /api/v1/...
+app.use('/movies', routes); // al momento scelgo di utilizzare rotte semplici, senza /api/v1/...
 app.use(notFound);
 app.use(serverError);
 
