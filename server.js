@@ -12,6 +12,8 @@ const cors = require("cors");
 
 app.use(express.static('public'));
 
+app.use(express.json()); // per poter leggere il body delle richieste in formato JSON
+
 app.use(cors({
   origin: process.env.FRONTEND_SERVER_PORT || "http://localhost:5173"
 }));

@@ -48,14 +48,30 @@ const show = (req, res) => {
 
 
 // store movie - for future implementation
-const store =  (req, res) => {
-res.status(501).json({error: true, message:"not implemented"})
+const store = (req, res) => {
+    res.status(501).json({ error: true, message: "not implemented" })
 }
 
 // store review - for future implementation
 const storeReview = (req, res) => {
-    res.status(501).json({ error: true, message: "not implemented" })
-}
+    const movieId = parseInt(req.params.id);
+    console.log("Movie ID:", movieId);
+    console.log("Request Body:", req.body); // Log the request body for debugging
+
+    const sql = `INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?)`;
+
+    const { name, vote, text } = req.body; // Destructure the request body
+
+
+    connection.query(sql, [movieId, name, vote, text], (err, result) => {
+        if (err) {
+            console.error("Error inserting review:", err);
+            return res.status(500).json({ error: true, message: "internal server error" });
+        }
+        res.status(201).json({ message: "review added", reviewId: result.insertId });
+    }
+
+)};
 
 
 module.exports = {
