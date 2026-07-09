@@ -10,7 +10,7 @@ const index = (req, res) => {
             console.error("error fetching movies", err);
             return res.status(500).json({ error: true, message: "error fetching movies" });
         }
-        results.json(results);
+        res.json(results);
     });
 };
 
@@ -21,7 +21,7 @@ const show = (req, res) => {
 
     const sql = "SELECT * FROM movies WHERE id = ?";
 
-    const reviewsSql = "SELECT id, review, rating, uername FROM reviews WHERE movie_id = ?";
+    const reviewsSql = "SELECT id, text, vote, name FROM reviews WHERE movie_id = ?";
 
     connection.query(sql, [id], (err, results) => {
         if (err) {

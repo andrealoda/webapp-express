@@ -4,10 +4,10 @@ const routesController = require('../controllers/routesController');
 
 
 //INDEX ROUTE
-router.get('/', routesController.getAllMovies);
+router.get('/', routesController.index);
 
 //SHOW ROUTE
-router.get('/:id', routesController.getMovieById);
+router.get('/:id', routesController.show);
 
 // STORE
 router.post('/', routesController.store);
